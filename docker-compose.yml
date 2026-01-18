@@ -1,0 +1,45 @@
+version: "3.8"
+
+services:
+  backend:
+    container_name: spotify-clone-backend
+    build:
+      context: .
+      target: development
+
+    command: npm run start:dev
+
+    ports:
+      - "3000:3000"
+
+    volumes:
+      - .:/usr/src/app
+      - /usr/usr/app/node_modules
+
+    environment:
+      - DATABASE_URL=postgresql://user:password@postgres:5432/spotify_db
+      - NODE_ENV=development
+    depends_on:
+      - postgres
+    networks:
+      - spotify-network
+
+  postgres:
+    container_name: spotify-clone-db
+    image: postgres:15-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: user,
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: spotify_db
+    volumes:
+      - spotify-clone:/var/lib/postgresql/data
+    networks:
+      - spotify-network
+
+volumes:
+  spotify-clone:
+
+networks:
+  spotify-network:
