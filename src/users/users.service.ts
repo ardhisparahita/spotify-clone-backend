@@ -12,7 +12,6 @@ export class UsersService {
 
   async create(userData: Partial<User>): Promise<User> {
     const newUser = this.userRepository.create(userData);
-
     return await this.userRepository.save(newUser);
   }
 
@@ -20,5 +19,17 @@ export class UsersService {
     return await this.userRepository.findOne({
       where: [{ email: term }, { username: term }],
     });
+  }
+
+  async findByEmail(email: string): Promise<User | null> {
+    return await this.userRepository.findOne({ where: { email } });
+  }
+
+  async findByUsername(username: string): Promise<User | null> {
+    return await this.userRepository.findOne({ where: { username } });
+  }
+
+  async countUsers(): Promise<number> {
+    return await this.userRepository.count();
   }
 }
