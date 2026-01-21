@@ -17,7 +17,7 @@ services:
       - /usr/usr/app/node_modules
 
     environment:
-      - DATABASE_URL=postgresql://user:password@postgres:5432/spotify_db
+      - DATABASE_URL=postgresql://postgres:passwordspotifyclone@localhost:5432/spotify_clone
       - NODE_ENV=development
     depends_on:
       - postgres
@@ -30,9 +30,10 @@ services:
     ports:
       - "5432:5432"
     environment:
-      POSTGRES_USER: user,
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: spotify_db
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
     volumes:
       - spotify-clone:/var/lib/postgresql/data
     networks:

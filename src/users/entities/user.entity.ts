@@ -6,6 +6,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Profile } from './profile.entity';
+import { Role } from '../enum/role.enum';
 
 @Entity('users')
 export class User {
@@ -20,6 +21,13 @@ export class User {
 
   @Column({ unique: true })
   password: string;
+
+  @Column({
+    type: 'varchar',
+    enum: Role,
+    default: Role.USER,
+  })
+  role: Role;
 
   @CreateDateColumn()
   readonly created_at: Date;
