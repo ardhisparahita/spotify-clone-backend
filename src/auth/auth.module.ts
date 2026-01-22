@@ -5,12 +5,14 @@ import { UsersModule } from 'src/users/users.module';
 import { JwtModule } from '@nestjs/jwt';
 import { config } from 'dotenv';
 import { jwtConstant } from './constant';
+import { ProfilesModule } from 'src/profiles/profiles.module';
 
 config();
 
 @Module({
   imports: [
     forwardRef(() => UsersModule),
+    ProfilesModule,
 
     JwtModule.register({
       global: true,
