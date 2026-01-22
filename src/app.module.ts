@@ -18,8 +18,8 @@ import { typeOrmConfig } from './config/database.config';
       useFactory: (configService: ConfigService) =>
         typeOrmConfig(configService),
     }),
-    UsersModule,
     AuthModule,
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],

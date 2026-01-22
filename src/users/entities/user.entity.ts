@@ -7,6 +7,7 @@ import {
 } from 'typeorm';
 import { Profile } from './profile.entity';
 import { Role } from '../enum/role.enum';
+import { Exclude } from 'class-transformer';
 
 @Entity('users')
 export class User {
@@ -19,6 +20,7 @@ export class User {
   @Column({ unique: true })
   email: string;
 
+  @Exclude()
   @Column({ unique: true })
   password: string;
 

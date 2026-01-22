@@ -1,5 +1,7 @@
 import {
   ConflictException,
+  forwardRef,
+  Inject,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -19,6 +21,7 @@ const SALT_ROUNDS = 12;
 @Injectable()
 export class AuthService {
   constructor(
+    @Inject(forwardRef(() => UsersService))
     private readonly usersService: UsersService,
     private readonly jwtService: JwtService,
   ) {}
