@@ -26,13 +26,9 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  // src/auth/auth.service.ts
-
   async register(dto: RegisterDto): Promise<AuthSuccessResponse> {
-    // Ubah return type
     const { email, username, password, full_name, country, birth_date } = dto;
 
-    // 1. Validasi Duplikasi
     const [existingEmail, existingUsername] = await Promise.all([
       this.usersService.findByEmail(email),
       this.usersService.findByUsername(username),
@@ -42,12 +38,10 @@ export class AuthService {
     if (existingUsername)
       throw new ConflictException('Username already exists');
 
-    // 2. Hashing & Role
     const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
     const count = await this.usersService.countUsers();
     const role = count === 0 ? Role.ADMIN : Role.USER;
 
-    // 3. Simpan User
     const newUser = await this.usersService.create({
       username,
       email,
@@ -55,7 +49,6 @@ export class AuthService {
       role,
     });
 
-    // 4. Simpan Profile
     await this.profilesService.create({
       user_id: newUser.id,
       full_name,
@@ -63,7 +56,6 @@ export class AuthService {
       birth_date,
     });
 
-    // 5. AUTO LOGIN: Buat Payload & Token
     const payload: UserPayload = {
       id: newUser.id,
       email: newUser.email,
@@ -72,7 +64,6 @@ export class AuthService {
 
     const token = await this.jwtService.signAsync(payload);
 
-    // 6. Return response yang sama dengan login
     return {
       message: 'User registered and logged in successfully',
       access_token: token,
@@ -91,7 +82,7 @@ export class AuthService {
     const user = await this.usersService.findByLoginTerm(usernameOrEmail);
 
     if (!user || !(await bcrypt.compare(password, user.password))) {
-      throw new UnauthorizedException('Invalid credentials');
+      throw new UnauthorizedException('Username atau password salah');
     }
 
     const payload: UserPayload = {

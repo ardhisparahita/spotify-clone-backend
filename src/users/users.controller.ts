@@ -15,6 +15,7 @@ import { Roles } from 'src/auth/decorators/role.decorator';
 import { RolesGuard } from 'src/auth/guard/role.guard';
 import { Role } from './enum/role.enum';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { UpdateUserRoleDto } from './dto/update-user-role.dto';
 
 @Controller('users')
 @UseGuards(AuthGuard, RolesGuard)
@@ -41,6 +42,15 @@ export class UsersController {
   @Patch('me')
   async updateMe(@User('id') id: string, @Body() updateDto: UpdateUserDto) {
     return await this.usersService.update(id, updateDto);
+  }
+
+  @Patch(':id/role')
+  @Roles(Role.ADMIN)
+  async updateRole(
+    @Param('id') id: string,
+    @Body() updateUserRoleDto: UpdateUserRoleDto,
+  ) {
+    return await this.usersService.update(id, updateUserRoleDto);
   }
 
   @Delete(':id')
